@@ -1,0 +1,13 @@
+# MATLAB / Simulink
+slprj/
+*.slxc
+*.autosave
+*.asv
+*.m~
+
+# Simulink codegen
+*_rtw/
+
+# OS
+.DS_Store
+Thumbs.db
