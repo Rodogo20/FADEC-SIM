@@ -1,38 +1,41 @@
 %% init_params.m
 % FADEC-SIM Stage 1 parameter initialization
 
-clearvars -except ans;  
+%clearvars -except ans; %not in use for now 
 
 %% Model / simulation
-t_stop = [];   % simulation running time
+t_stop = 30;   % simulation running time - arbitrary
 
 %% Initial conditions
-N_idle = [];   % initial normalized spool speed (0..1)
-
+N_idle = 0.25;   % initial normalized spool speed (0..1) 
+N_max_ref = 1.0;   % max commanded normalized speed from throttle=1
 
 %% Controller (speed loop)
 % PI controller output (unconstrained): Wf_raw = Kp_N*e_N + Ki_N*Integral(e_N)
-Kp_N = [];
-Ki_N = [];
 
-% Integrator clamp 
-I_N_min = [];
-I_N_max = [];
+%conservative values
+Kp_N = 2; %0.5-4
+Ki_N = 1; %0.2-3
+
+% Integrator clamp - (anti-windup)
+I_N_min = -0.2;
+I_N_max = 0.2;
 
 %% Fuel actuator limits
-Wf_min = [];       % min fuel command
-Wf_max = [];       % max fuel command
-dWf_up_max = [];   % max fuel increase rate (per second)
-dWf_dn_max = [];   % max fuel decrease rate (per second)
+Wf_min = 0;       % min fuel command
+Wf_max = 1;       % max fuel command
+dWf_up_max = 0.5;   % max fuel increase rate (per second)
+dWf_dn_max = 1;   % max fuel decrease rate (per second)
 
 
 %% Engine 
-tau_N = [];    % spool speed time constant (s)
+tau_N = 1.5;    % spool speed time constant (s)
 
 % Steady-state linear map 
 % N_eq = k_Neq*Wf_cmd + b_Neq
-k_Neq = [];
-b_Neq = [];
+
+k_Neq = 1;
+b_Neq = 0; %simplified for now
 
 %% Proxy outputs (Stage 1)
 % EGT proxy: EGT = EGT_idle + A_EGT*Wf_cmd - B_EGT*N
