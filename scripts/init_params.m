@@ -14,8 +14,8 @@ N_max_ref = 1.0;   % max commanded normalized speed from throttle=1
 % PI controller output (unconstrained): Wf_raw = Kp_N*e_N + Ki_N*Integral(e_N)
 
 %conservative values
-Kp_N = 2; %0.5-4
-Ki_N = 1; %0.2-3
+Kp_N = 3; %0.5-4
+Ki_N = 0.6; %0.2-3
 
 % Integrator clamp - (anti-windup)
 I_N_min = -0.2;
@@ -27,9 +27,10 @@ Wf_max = 1;       % max fuel command
 dWf_up_max = 0.5;   % max fuel increase rate (per second)
 dWf_dn_max = 1;   % max fuel decrease rate (per second)
 
+Wf_idle = (N_idle - b_Neq)/k_Neq;   
 
 %% Engine 
-tau_N = 1.5;    % spool speed time constant (s)
+tau_N = 1.2;    % spool speed time constant (s)
 
 % Steady-state linear map 
 % N_eq = k_Neq*Wf_cmd + b_Neq
@@ -39,10 +40,16 @@ b_Neq = 0; %simplified for now
 
 %% Proxy outputs (Stage 1)
 % EGT proxy: EGT = EGT_idle + A_EGT*Wf_cmd - B_EGT*N
-EGT_idle = [];
-A_EGT    = [];
-B_EGT    = [];
+% NORMALISED
+EGT_idle = 0.4;
+EGT_init = EGT_idle + A_EGT*Wf_idle - B_EGT*N_idle;
+
+A_EGT    = 0.7;
+B_EGT    = 0.2;
+
+tau_EGT = 2.0;   % [s] 1–5
 
 % Thrust proxy: Thrust = T_max * N^(a_thrust)
-T_max    = [];
-a_thrust = [];
+% NORMALISED
+T_max    = 1;
+a_thrust = 2;  %non-linear matches intuition . Not realistic
