@@ -1,8 +1,6 @@
 %% run_simulations.m
 % Stage 1 baseline simple runner 
 
-clear; clc; close all;
-
 %% Paths / project setup
 scriptDir = fileparts(mfilename("fullpath"));  
 cd(scriptDir);
@@ -61,18 +59,6 @@ catch
     warning("Signal 'throttle' not found in logsout (check signal name/label).");
 end
 
-%% ========== PLOTS  ==========
-N_ts = logsout.get("N").Values;   % this is a timeseries
-t    = N_ts.Time;                 % time vector
-N    = N_ts.Data;                 % data vector
-
-figure;
-plot(t, N);
-grid on;
-xlabel("Time (s)");
-ylabel("N");
-title("Logged signal: N");
-
 
 %% Save baseline output
 logsDir = fullfile(projRoot, "results", "logs");
@@ -80,6 +66,6 @@ if ~exist(logsDir, "dir")
     mkdir(logsDir);
 end
 
-save(fullfile(logsDir, "stage1_baseline.mat"), "simOut");
+save(fullfile(logsDir, "stage1.mat"), "simOut");
 
-disp("Stage 1 baseline saved to results/logs/stage1_baseline.mat");
+disp("Stage 1  saved to results/logs/stage1_baseline.mat");
