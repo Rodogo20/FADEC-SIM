@@ -1,11 +1,14 @@
+function simOut = run_simulations(cfg)
+
 %% run_simulations.m
 % Stage 1 baseline simple runner 
+
 
 %% Paths / project setup
 scriptDir = fileparts(mfilename("fullpath"));  
 cd(scriptDir);
 
-mdl = "top_level";                      % Simulink model name (no .slx)
+mdl = cfg.model;                    % Simulink model name (no .slx)
 
 projRoot = fileparts(scriptDir);
 addpath(genpath(projRoot));         
@@ -20,7 +23,7 @@ run(initFile);
 %% Load model + basic sim settings
 load_system(mdl);
 
-t_stop = 20;   % simulation running time - arbitrary
+t_stop = cfg.stopTime;   % simulation running time - arbitrary
 set_param(mdl, "StopTime", num2str(t_stop));
 
 
@@ -33,9 +36,9 @@ tests = struct([]);
 
 % Test 1 (edit later)
 tests(1).name          = "step_up";
-tests(1).thr_step_time = 1;
-tests(1).thr_init      = 0.0;
-tests(1).thr_final     = 0.8;
+tests(1).thr_step_time = cfg.test.thr_step_time;
+tests(1).thr_init      = cfg.test.thr_init;
+tests(1).thr_final     = cfg.test.thr_final;
 
 activeTest = 1;
 
@@ -66,6 +69,9 @@ if ~exist(logsDir, "dir")
     mkdir(logsDir);
 end
 
-save(fullfile(logsDir, "stage1.mat"), "simOut");
+save(cfg.logFile, "simOut");
 
-disp("Stage 1  saved to results/logs/stage1_baseline.mat");
+disp("Stage 1  saved to results/logs/stage1.mat");
+
+
+end

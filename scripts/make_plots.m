@@ -1,10 +1,9 @@
-%% plot.m
-% Loads logs and plots everything
+function make_plots(cfg, simOut)
+
 
 %% plots.m
-% Loads saved simulation output and prepares for plotting
+% Loads saved simulation output and plots
 
-close all;
 
 scriptsDir = fileparts(mfilename("fullpath"));
 projRoot   = fileparts(scriptsDir);
@@ -33,3 +32,5 @@ grid on;
 xlabel("Time (s)");
 ylabel("N");
 title("Logged signal: N");
+
+end
