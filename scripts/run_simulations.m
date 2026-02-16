@@ -1,4 +1,5 @@
-function simOut = run_simulations(cfg)
+function simOut = run_simulations(cfg, tc)
+
 
 %% run_simulations.m
 % Stage 1 baseline simple runner 
@@ -6,7 +7,7 @@ function simOut = run_simulations(cfg)
 
 %% Paths / project setup
 scriptDir = fileparts(mfilename("fullpath"));  
-cd(scriptDir);
+
 
 mdl = cfg.model;                    % Simulink model name (no .slx)
 
@@ -30,22 +31,9 @@ set_param(mdl, "StopTime", num2str(t_stop));
 % Turn on signal logging 
 set_param(mdl, "SignalLogging", "on", "SignalLoggingName", "logsout");
 
-%% ========== TESTS ==========
 
-tests = struct([]);
+%% ========== RUN  ==========
 
-% Test 1 (edit later)
-tests(1).name          = "step_up";
-tests(1).thr_step_time = cfg.test.thr_step_time;
-tests(1).thr_init      = cfg.test.thr_init;
-tests(1).thr_final     = cfg.test.thr_final;
-
-activeTest = 1;
-
-
-%% ========== RUN (single baseline sim) ==========
-% Apply selected test 
-tc = tests(activeTest);
 
 assignin("base","thr_step_time", tc.thr_step_time);
 assignin("base","thr_init",      tc.thr_init);
@@ -69,9 +57,14 @@ if ~exist(logsDir, "dir")
     mkdir(logsDir);
 end
 
-save(cfg.logFile, "simOut");
 
-disp("Stage 1  saved to results/logs/stage1.mat");
+runInfo.timestamp = datestr(now);   %saves metadata
+runInfo.model     = cfg.model;
+runInfo.stopTime  = cfg.stopTime;
+runInfo.test      = cfg.test;
+save(cfg.logFile, "simOut", "cfg", "runInfo");
+
+disp("saved log");
 
 
 end
