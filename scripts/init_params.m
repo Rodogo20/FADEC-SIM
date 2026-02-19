@@ -42,7 +42,7 @@ EGT_idle = 0.4;
 A_EGT    = 0.7;
 B_EGT    = 0.2;
 
-EGT_init = EGT_idle + A_EGT * Wf_idle - B_EGT*N_idle;
+EGT_init = EGT_idle + A_EGT * Wf_idle - B_EGT * N_idle;
 
 tau_EGT = 2.0;   % [s] 1–5
 

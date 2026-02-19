@@ -9,7 +9,7 @@ projRoot   = fileparts(scriptsDir);
 addpath(genpath(projRoot));
 
 %% Settings
-rerunSim = false;   % true = run Simulink again, false = use saved results
+rerunSim = true;   % true = run Simulink again, false = use saved results
 
 %cfg is a configuration container -
 
@@ -20,17 +20,17 @@ cfg.model    = "top_level";
 
 tests = struct([]);
 
-tests(1).name          = "step_up";
+tests(1).name          = "stepUp";
 tests(1).stopTime      = 20;
 tests(1).thr_step_time = 1;
 tests(1).thr_init      = 0.0;
 tests(1).thr_final     = 0.8;
 
-tests(2).name          = "step_down";
+tests(2).name          = "stepDown";
 tests(2).stopTime      = 20;
-tests(2).thr_step_time = 1;
+tests(2).thr_step_time = 5;
 tests(2).thr_init      = 0.8;
-tests(2).thr_final     = 0.2;
+tests(2).thr_final     = 0;
 
 tests(3).name          = "slam";   %will need model upgrade for true slam
 tests(3).stopTime      = 20;
@@ -39,7 +39,7 @@ tests(3).thr_init      = 0.0;
 tests(3).thr_final     = 1.0;
 
 
-activeTest = 1;   % choose 1, 2 or 3
+activeTest = 2;   % choose 1, 2 or 3
 
 tc = tests(activeTest);
 
@@ -53,7 +53,7 @@ cfg.testName = tc.name;
 disp("Running test: " + cfg.testName);
 
 
-cfg.logFile = fullfile(projRoot, "results", "logs", "stage1_" + cfg.testName + ".mat");
+cfg.logFile = fullfile(projRoot, "results", "logs", "V1_" + cfg.testName + ".mat");
 
 %% Run simulation
 

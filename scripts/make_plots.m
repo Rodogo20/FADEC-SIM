@@ -110,13 +110,12 @@ set(groot,'defaultFigureColor','w');
 nexttile;
 plot(t, Nref);hold on;
 plot(t, N);
-plot(t, e);
 grid on;
 xlabel("Time (s)");
 ylabel("Normalized");
 title("Command vs Engine Response");
-legend('$N_{\mathrm{ref}}$','$N$','$e$','Location','best');
-ylim([min(e) - 0.05 1.05]) ; 
+legend('$N_{\mathrm{ref}}$','$N$','Location','best');
+ylim([0 1.05]) ; 
 
 
 %% Plot 2 - Fuel commands
@@ -129,6 +128,9 @@ xlabel("Time (s)");
 legend('$Wf{}_{\mathrm{raw}}$','$Wf{}_{\mathrm{cmd}}$',"Location","best",'Interpreter','latex');
 title('Fuel Commands')
 ylim([min([Wf;Wf_raw]) max([Wf;Wf_raw] + 0.05)]);
+h = yline(1,'--');
+h.HandleVisibility = 'off';
+
 
 ax = gca;
 yt = ax.YTick;
