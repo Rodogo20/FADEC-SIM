@@ -44,5 +44,5 @@ main
 - Automated tests + plots + metrics 
 
 
-![Stage 1 — stepDown](./docs/Images/model.png)
+![Stage 1 — stepDown](./docs/Images/V1_model.png)
 ![Stage 1 — stepUp](./docs/Images/V1_StepUp.png)
