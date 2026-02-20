@@ -1,6 +1,6 @@
 
 
-\## Author : Rodolfo Godinez , Aerospace Engineering Student at UC3M
+\# Author : Rodolfo Godinez , Aerospace Engineering Student at UC3M
 
 \# FADEC-SIM    
 
@@ -17,8 +17,11 @@ Simplified FADEC-like engine control system implemented in MATLAB/Simulink.
 \- model/   : Simulink models
 
 \- scripts/ : MATLAB scripts for simulation, tests, and plots
+
 \- results/ : Generated plots and metrics
+
 \- docs/    : references , planning and images
+
 \- report/  :  written report
 
 **Requirements:** MATLAB + Simulink
