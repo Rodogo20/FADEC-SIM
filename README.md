@@ -28,8 +28,7 @@ Simplified FADEC-like engine control system implemented in MATLAB/Simulink.
 
 ```matlab
 main
-
-
+```
 
 \## Status
 
