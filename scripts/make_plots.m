@@ -1,6 +1,4 @@
-function make_plots(cfg, simOut, runInfo)
-
-close all;
+function make_plots(cfg, simOut)
 
 %% plots.m
 % Loads saved simulation output and plots
@@ -83,27 +81,7 @@ set(groot,'defaultFigureColor','w');
 
 fig = figure;
 set(fig,'WindowState','maximized');
-tiledlayout(2,2);
-set(gcf,'Position',[100 100 1100 700]);
-grid on;
-
-
-
-set(groot,'defaultTextInterpreter','latex');
-set(groot,'defaultLegendInterpreter','latex');
-set(groot,'defaultAxesTickLabelInterpreter','latex');
-
-set(groot,'defaultAxesFontSize',15);
-set(groot,'defaultTextFontSize',14);
-set(groot,'defaultLegendFontSize',12);
-
-set(groot,'defaultLineLineWidth',1.4);
-set(groot,'defaultAxesLineWidth',1.0);
-
-set(groot,'defaultFigureColor','w');
-
-
-
+tl = tiledlayout(fig,2,2,'TileSpacing','compact','Padding','compact');
 
 %% Plot 1 - Command vs engine response
 
@@ -127,20 +105,23 @@ grid on;
 xlabel("Time (s)");
 legend('$Wf{}_{\mathrm{raw}}$','$Wf{}_{\mathrm{cmd}}$',"Location","best",'Interpreter','latex');
 title('Fuel Commands')
-ylim([min([Wf;Wf_raw]) max([Wf;Wf_raw] + 0.05)]);
-h = yline(1,'--');
-h.HandleVisibility = 'off';
+ylim([min([Wf;Wf_raw;0]-0.1) max([Wf;Wf_raw ; 1] + 0.1)]);
+h1 = yline(1,'--');
+h2 = yline(0,'--');
+h1.HandleVisibility = 'off';
+h2.HandleVisibility = 'off';
 
+ax = gca; yt = ax.YTick; tol = 1e-9;
 
-ax = gca;
-yt = ax.YTick;
+if ~any(abs(yt-0)<tol), yt = sort([yt 0]); ax.YTick = yt; end
 yl = string(yt);
 
-idx = abs(yt - 1) < 1e-9;          % tick at 1.0
-yl(idx) = "$Wf_{\mathrm{max}}$";  % replace label
+yl(abs(yt-0)<tol) = "$Wf_{\mathrm{min}}$";    %replaces y axis values 
+yl(abs(yt-1)<tol) = "$Wf_{\mathrm{max}}$";
 
 ax.YTickLabel = yl;
 ax.TickLabelInterpreter = "latex";
+
 
 
 %% Plot 3 - EGT
@@ -167,5 +148,12 @@ title("Thrust Proxy");
 xline(cfg.test.thr_step_time,'--','T','Interpreter','latex');
 ylim([0 1.05]) ; 
 
+%% Global title 
+title(tl, "V1 — " + string(cfg.testName), 'Interpreter','none','FontWeight','normal');
+
+
+% ===== Save figure =====
+outBase = fullfile(plotsDir, "V1_" + string(cfg.testName));
+exportgraphics(fig, outBase + ".png", "Resolution", 300);   % best for README
 
 end

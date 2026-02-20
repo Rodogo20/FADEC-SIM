@@ -2,8 +2,13 @@
 % FADEC-SIM Stage 1 parameter initialization
 
 %% Initial conditions
-N_idle = 0.25;   % initial normalized spool speed (0..1) 
+
+thr0   = tc.thr_init;
+
+N_idle = 0.25;   %  normalized spool speed at iddle T= 0
 N_max_ref = 1.0;   % max commanded normalized speed from throttle=1
+
+N_init = N_idle + thr0 * (N_max_ref - N_idle);
 
 %% Controller (speed loop)
 % PI controller output (unconstrained): Wf_raw = Kp_N*e_N + Ki_N*Integral(e_N)
@@ -33,6 +38,7 @@ k_Neq = 1;
 b_Neq = 0; %simplified for now
 
 Wf_idle = (N_idle - b_Neq)/k_Neq;   
+Wf_init = (N_init - b_Neq)/k_Neq;
 
 %% Proxy outputs (Stage 1)
 % EGT proxy: EGT = EGT_idle + A_EGT*Wf_cmd - B_EGT*N
@@ -42,7 +48,7 @@ EGT_idle = 0.4;
 A_EGT    = 0.7;
 B_EGT    = 0.2;
 
-EGT_init = EGT_idle + A_EGT * Wf_idle - B_EGT * N_idle;
+EGT_init = EGT_idle + A_EGT * Wf_init - ( B_EGT * N_init ) ;
 
 tau_EGT = 2.0;   % [s] 1–5
 

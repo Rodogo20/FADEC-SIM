@@ -1,13 +1,17 @@
-# MATLAB / Simulink
+# MATLAB autosave / temp
+*.asv
+*.m~ 
 slprj/
 *.slxc
-*.autosave
-*.asv
-*.m~
+*.slxc.*
+*.slx.autosave
+*.mdl.autosave
 
-# Simulink codegen
-*_rtw/
+# Generated outputs
+results/logs/
+results/plots/
+results/metrics/
 
-# OS
+# Optional: cache / OS junk
 .DS_Store
 Thumbs.db

@@ -35,11 +35,12 @@ set_param(mdl, "SignalLogging", "on", "SignalLoggingName", "logsout");
 %% ========== RUN  ==========
 
 
-assignin("base","thr_step_time", tc.thr_step_time);
-assignin("base","thr_init",      tc.thr_init);
-assignin("base","thr_final",     tc.thr_final);
+thr_step_time = tc.thr_step_time;
+thr_init      = tc.thr_init;
+thr_final     = tc.thr_final;
 
-simOut = sim(mdl);
+simOut = sim(mdl, "SrcWorkspace","current");
+
 logsout = simOut.logsout;
 
 
