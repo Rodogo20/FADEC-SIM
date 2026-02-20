@@ -12,6 +12,17 @@ results/logs/
 results/plots/
 results/metrics/
 
+#docs 
+docs/OneNote/
+docs/**.one
+docs/**.onepkg
+
+docs/references/*.pdf
+docs/references/**/*.pdf
+
+# But keep README screenshots
+!docs/images/**
+
 # Optional: cache / OS junk
 .DS_Store
 Thumbs.db
