@@ -4,6 +4,7 @@ function simOut = run_simulations(cfg, tc)
 %% run_simulations.m
 % Stage 1 baseline simple runner 
 
+thr_ts = tc.thr_ts;  %#ok<NASGU>
 
 %% Paths / project setup
 scriptDir = fileparts(mfilename("fullpath"));  
@@ -19,12 +20,13 @@ initFile = fullfile(projRoot, "scripts", "init_params.m");
 if ~isfile(initFile)
     error("init_params.m not found at: %s", initFile);
 end
+
 run(initFile);       
 
 %% Load model + basic sim settings
 load_system(mdl);
 
-t_stop = cfg.stopTime;   % simulation running time - arbitrary
+t_stop = tc.stopTime;   % simulation running time - arbitrary
 set_param(mdl, "StopTime", num2str(t_stop));
 
 
@@ -34,10 +36,6 @@ set_param(mdl, "SignalLogging", "on", "SignalLoggingName", "logsout");
 
 %% ========== RUN  ==========
 
-
-thr_step_time = tc.thr_step_time;
-thr_init      = tc.thr_init;
-thr_final     = tc.thr_final;
 
 simOut = sim(mdl, "SrcWorkspace","current");
 

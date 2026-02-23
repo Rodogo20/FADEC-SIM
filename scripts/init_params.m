@@ -1,9 +1,20 @@
 %% init_params.m
 % FADEC-SIM Stage 1 parameter initialization
 
-%% Initial conditions
+if ~exist("thr_ts","var")
+    % fallback: if running model manually without main
+    if ~exist("thr_init","var"),      thr_init = 0.0; end
+    if ~exist("thr_final","var"),     thr_final = 0.8; end
+    if ~exist("thr_step_time","var"), thr_step_time = 1.0; end
+    if ~exist("t_end","var"),         t_end = 20.0; end
 
-thr0   = tc.thr_init;
+    thr_ts = timeseries([thr_init; thr_final; thr_final], [0; thr_step_time; t_end]);
+    thr_ts = setinterpmethod(thr_ts, "zoh");
+end
+
+thr0 = thr_ts.Data(1);
+
+%% Initial conditions
 
 N_idle = 0.25;   %  normalized spool speed at iddle T= 0
 N_max_ref = 1.0;   % max commanded normalized speed from throttle=1

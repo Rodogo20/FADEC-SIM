@@ -28,7 +28,7 @@ EGT_ts   = logsout.get("EGT").Values;
 Th_ts    = logsout.get("Thrust").Values;
 WfRaw_ts = logsout.get("Wf_raw").Values;
 
-thr   = thr_ts.Data;
+throttle   = thr_ts.Data;
 Nref  = Nref_ts.Data;
 N     = N_ts.Data;
 Wf    = Wf_ts.Data;
@@ -43,7 +43,7 @@ e = Nref - N;
 avg_abs_err = mean(abs(e));   
 rms_err = sqrt(mean(e.^2));    %rms penalizes big errors
 
-overshoot = max(N) - Nref(end);
+overshoot = 100* abs((max(N) - max(Nref)) )/ max(Nref);
 
 EGT_max = max(EGT);
 
@@ -58,12 +58,12 @@ if ~exist(metricsDir, "dir")
     mkdir(metricsDir);
 end
 
-save(fullfile(metricsDir, "stage1_" + cfg.testName + "_metrics.mat"), "runMetrics");
+save(fullfile(metricsDir, "stage2_" + cfg.testName + "_metrics.mat"), "runMetrics");
 
 
 %% ========== PLOTS  ==========
 
-fprintf("Stage1 - %s | avgE =%.3f RMS =%.3f OverShoot =%.3f EGT_max =%.3f\n", ...
+fprintf("Stage2 - %s | avgE =%.3f RMS =%.3f OverShoot =%.3f %%  EGT_max =%.3f\n", ...
     cfg.testName, runMetrics.avg_abs_err, runMetrics.rms_err, runMetrics.overshoot, runMetrics.EGT_max);
 
 set(groot,'defaultTextInterpreter','latex');
@@ -88,11 +88,12 @@ tl = tiledlayout(fig,2,2,'TileSpacing','compact','Padding','compact');
 nexttile;
 plot(t, Nref);hold on;
 plot(t, N);
+plot(t, throttle, 'Color', [0 0 0 0.25], 'LineWidth', 5); 
 grid on;
 xlabel("Time (s)");
 ylabel("Normalized");
 title("Command vs Engine Response");
-legend('$N_{\mathrm{ref}}$','$N$','Location','best');
+legend('$N_{\mathrm{ref}}$','$N$','Throttle','Location','best');
 ylim([0 1.05]) ; 
 
 
@@ -132,7 +133,6 @@ grid on;
 xlabel("Time (s)");
 ylabel("EGT");
 title("EGT Proxy");
-xline(cfg.test.thr_step_time,'--','T','Interpreter','latex');
 ylim([0 1.05]) ; 
 
 
@@ -145,15 +145,16 @@ grid on;
 xlabel("Time (s)");
 ylabel("Thrust");
 title("Thrust Proxy");
-xline(cfg.test.thr_step_time,'--','T','Interpreter','latex');
 ylim([0 1.05]) ; 
 
+
+
 %% Global title 
-title(tl, "V1 — " + string(cfg.testName), 'Interpreter','none','FontWeight','normal');
+title(tl, "V2 — " + string(cfg.testName), 'Interpreter','none','FontWeight','normal');
 
 
 % ===== Save figure =====
-outBase = fullfile(plotsDir, "V1_" + string(cfg.testName));
-exportgraphics(fig, outBase + ".png", "Resolution", 300);   % best for README
+outBase = fullfile(plotsDir, "V2_" + string(cfg.testName));
+exportgraphics(fig, outBase + ".png", "Resolution", 300);  
 
 end
