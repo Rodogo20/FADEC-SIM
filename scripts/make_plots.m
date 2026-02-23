@@ -27,12 +27,14 @@ Wf_ts    = logsout.get("Wf_cmd").Values;
 EGT_ts   = logsout.get("EGT").Values;
 Th_ts    = logsout.get("Thrust").Values;
 WfRaw_ts = logsout.get("Wf_raw").Values;
+WfTlim_ts = logsout.get("Wf_Tlim").Values;
 
 throttle   = thr_ts.Data;
 Nref  = Nref_ts.Data;
 N     = N_ts.Data;
 Wf    = Wf_ts.Data;
 Wf_raw = WfRaw_ts.Data;
+Wf_Tlim = WfTlim_ts.Data;
 EGT   = EGT_ts.Data;
 Thrust = Th_ts.Data;
 
@@ -133,7 +135,7 @@ grid on;
 xlabel("Time (s)");
 ylabel("EGT");
 title("EGT Proxy");
-ylim([0 1.05]) ; 
+ylim([0 max([1;EGT] + 0.1)]);
 
 
 

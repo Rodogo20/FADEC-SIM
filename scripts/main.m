@@ -28,8 +28,8 @@ tests(1).t_end         = 20.0;
 tests(2).name     = "burstChop";
 tests(2).profile  = "burstChop";
 tests(2).t_burst  = 1.0;
-tests(2).t_chop   = 12.0;
-tests(2).t_end    = 20.0;   % will become stopTime
+tests(2).t_chop   = 15.0;
+tests(2).t_end    = 30.0;   % will become stopTime
 
 % --- Ramp test
 tests(3).name         = "rampUp";
