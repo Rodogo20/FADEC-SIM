@@ -28,6 +28,7 @@ EGT_ts   = logsout.get("EGT").Values;
 Th_ts    = logsout.get("Thrust").Values;
 WfRaw_ts = logsout.get("Wf_raw").Values;
 WfTlim_ts = logsout.get("Wf_Tlim").Values;
+EGTLimActive_ts = logsout.get("EGT_lim_active").Values;
 
 throttle   = thr_ts.Data;
 Nref  = Nref_ts.Data;
@@ -37,6 +38,8 @@ Wf_raw = WfRaw_ts.Data;
 Wf_Tlim = WfTlim_ts.Data;
 EGT   = EGT_ts.Data;
 Thrust = Th_ts.Data;
+
+EGT_lim_active = EGTLimActive_ts;  %????
 
 
 %% --------- METRICS ----------
@@ -124,6 +127,7 @@ yl(abs(yt-1)<tol) = "$Wf_{\mathrm{max}}$";
 
 ax.YTickLabel = yl;
 ax.TickLabelInterpreter = "latex";
+
 
 
 
