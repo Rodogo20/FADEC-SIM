@@ -57,7 +57,7 @@ dWf_dn_max = 1;    % max fuel decrease rate (per second)
 % NORMALISED
 EGT_idle = 0.4;
 
-A_EGT = 0.8;
+A_EGT = 0.7;
 B_EGT = 0.2;
 
 EGT_init = EGT_idle + A_EGT * Wf_init - ( B_EGT * N_init );
@@ -73,7 +73,6 @@ K_EGT    = A_EGT;          % local EGT sensitivity to fuel (proxy gain)
 Kp_T = tau_EGT / (K_EGT * lambda_T);
 Ki_T = 1 / (K_EGT * lambda_T);
 
-EGT_margin = 0.01; % small deadband to avoid chatter. USED LATER
 
 % Thrust proxy: Thrust = T_max * N^(a_thrust)
 % NORMALISED
