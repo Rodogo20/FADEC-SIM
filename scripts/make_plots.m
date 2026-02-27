@@ -39,7 +39,7 @@ Wf_Tlim = WfTlim_ts.Data;
 EGT   = EGT_ts.Data;
 Thrust = Th_ts.Data;
 
-EGT_lim_active = EGTLimActive_ts;  %????
+EGT_lim_active = EGTLimActive_ts.Data;                   % numeric 0/1 (or logical)
 
 
 %% --------- METRICS ----------
@@ -112,6 +112,21 @@ xlabel("Time (s)");
 legend('$Wf{}_{\mathrm{raw}}$','$Wf{}_{\mathrm{cmd}}$',"Location","best",'Interpreter','latex');
 title('Fuel Commands')
 ylim([min([Wf;Wf_raw;0]-0.1) max([Wf;Wf_raw ; 1] + 0.1)]);
+
+lim = EGT_lim_active(:) > 0.5 & (EGT(:) > 1);;     % make sure it's logical
+yl = ylim;
+
+d = diff([false; lim; false]);
+iStart = find(d == 1);
+iEnd   = find(d == -1) - 1;
+
+for k = 1:numel(iStart)
+    ts = t(iStart(k)); te = t(iEnd(k));
+    p = patch([ts te te ts], [yl(1) yl(1) yl(2) yl(2)], [1 0 0], ...
+              'FaceAlpha', 0.08, 'EdgeColor', 'none', 'HandleVisibility', 'off');
+    uistack(p,'bottom'); % keep shading behind Wf lines
+end
+
 h1 = yline(1,'--');
 h2 = yline(0,'--');
 h1.HandleVisibility = 'off';
