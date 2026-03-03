@@ -14,21 +14,31 @@ end
 
 thr0 = thr_ts.Data(1);
 
-%% Initial conditions
+%% Command Mapping
 
 N_idle    = 0.25;   %  normalized spool speed at iddle T= 0
 N_max_ref = 1.0;    % max commanded normalized speed from throttle=1
 
-N_init = N_idle + thr0 * (N_max_ref - N_idle);
+%LUT
+throttle_bp   = [0 0.05 0.10 0.20 0.40 0.70 1.00];   %breakpoints     
+f_tbl = [0 0.005 0.015 0.05 0.20 0.65 1.00];         %table values 
+
+Nref_tbl = N_idle + (N_max_ref - N_idle).* f_tbl;
+
+thr0 = min(max(thr0, throttle_bp(1)), throttle_bp(end));
+f0 = interp1(throttle_bp, f_tbl, thr0, 'linear');
+N_init = N_idle + (N_max_ref - N_idle)*f0;
+
+% monotonic, shaped
 
 %% Engine 
 tau_N = 1.2;    % spool speed time constant (s)
 
-% Steady-state linear map 
-% N_eq = k_Neq*Wf_cmd + b_Neq
 
 k_Neq = 1;
 b_Neq = 0; %simplified for now
+
+a_Neq = k_Neq / 1 - b_Neq ;
 
 Wf_idle = (N_idle - b_Neq)/k_Neq;   
 Wf_init = (N_init - b_Neq)/k_Neq;
@@ -40,6 +50,8 @@ lambda_N = t95_N / 3;        % first-order relation
 
 Kp_N = tau_N / (k_Neq * lambda_N);
 Ki_N = 1 / (k_Neq * lambda_N);
+
+K_aw = Ki_N / Kp_N ; 
 
 % Integrator clamps - (anti-windup)
 I_N_min = 0;
@@ -55,6 +67,7 @@ dWf_dn_max = 1;    % max fuel decrease rate (per second)
 %% Proxy outputs 
 % EGT proxy: EGT = EGT_idle + A_EGT*Wf_cmd - B_EGT*N
 % NORMALISED
+
 EGT_idle = 0.4;
 
 A_EGT = 0.7;
@@ -68,7 +81,7 @@ tau_EGT = 2;
 %  EGT limiter
 EGT_max  = 1.00; % normalized limit 
 lambda_T = tau_EGT;        % conservative target
-K_EGT    = A_EGT;          % local EGT sensitivity to fuel (proxy gain)
+K_EGT    = A_EGT ;          % local EGT sensitivity to fuel (proxy gain)
 
 Kp_T = tau_EGT / (K_EGT * lambda_T);
 Ki_T = 1 / (K_EGT * lambda_T);

@@ -36,12 +36,12 @@ tests(3).name         = "rampUp";
 tests(3).profile      = "ramp";
 tests(3).thr_init     = 0.1;
 tests(3).thr_final    = 0.9;
-tests(3).t_ramp_start = 1.0;
-tests(3).t_ramp_end   = 8.0;
-tests(3).t_end        = 20.0;
+tests(3).t_ramp_start = 4.0;
+tests(3).t_ramp_end   = 15.0;
+tests(3).t_end        = 30.0;
 
 %% ======= LOOP  =======
-for k = 2 % 1:numel(tests)  %replace 1:numel(tests) for single test
+for k = 3 % 1:numel(tests)  %replace 1:numel(tests) for single test
 
     tc = tests(k);
 
