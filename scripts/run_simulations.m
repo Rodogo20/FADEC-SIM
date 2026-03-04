@@ -44,7 +44,6 @@ logsout = simOut.logsout;
 
 try        %sanity check
     thr = simOut.logsout.get("throttle").Values;
-    fprintf("Throttle: start=%.3f, end=%.3f\n", thr.Data(1), thr.Data(end));
 catch
     warning("Signal 'throttle' not found in logsout (check signal name/label).");
 end

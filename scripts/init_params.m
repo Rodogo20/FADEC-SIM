@@ -5,7 +5,7 @@ if ~exist("thr_ts","var")
     % fallback: if running model manually without main
     if ~exist("thr_init","var"),      thr_init = 0.0; end
     if ~exist("thr_final","var"),     thr_final = 1; end
-    if ~exist("thr_step_time","var"), thr_step_time = 1.0; end
+    if ~exist("thr_step_time","var"), thr_step_time = 3.0; end
     if ~exist("t_end","var"),         t_end = 20.0; end
 
     thr_ts = timeseries([thr_init; thr_final; thr_final], [0; thr_step_time; t_end]);
@@ -27,7 +27,7 @@ Nref_tbl = N_idle + (N_max_ref - N_idle).* f_tbl;
 
 thr0 = min(max(thr0, throttle_bp(1)), throttle_bp(end));
 f0 = interp1(throttle_bp, f_tbl, thr0, 'linear');
-N_init = N_idle + (N_max_ref - N_idle)*f0;
+N_init = N_idle + (N_max_ref - N_idle) * f0;
 
 % monotonic, shaped
 
@@ -38,10 +38,17 @@ tau_N = 1.2;    % spool speed time constant (s)
 k_Neq = 1;
 b_Neq = 0; %simplified for now
 
-a_Neq = k_Neq / 1 - b_Neq ;
+a_Neq = k_Neq / (1 - b_Neq);
 
-Wf_idle = (N_idle - b_Neq)/k_Neq;   
-Wf_init = (N_init - b_Neq)/k_Neq;
+%invert for initial idle conditions
+den = 1 - exp(-a_Neq);
+
+y = (N_idle - b_Neq)/(1 - b_Neq);  
+Wf_idle = -(1/a_Neq)*log(1 - y*den);
+
+y = (N_init - b_Neq)/(1 - b_Neq);  
+Wf_init = -(1/a_Neq)*log(1 - y*den);
+
 
 %% Controller (speed loop)
 
@@ -65,23 +72,32 @@ dWf_dn_max = 1;    % max fuel decrease rate (per second)
 
 
 %% Proxy outputs 
-% EGT proxy: EGT = EGT_idle + A_EGT*Wf_cmd - B_EGT*N
-% NORMALISED
 
-EGT_idle = 0.4;
-
-A_EGT = 0.7;
-B_EGT = 0.2;
-
-EGT_init = EGT_idle + A_EGT * Wf_init - ( B_EGT * N_init );
+% EGT NORMALISED
 
 tau_EGT = 2;   
 
+%NASA LUT
+
+lutFile  = fullfile(projRoot,"data","processed","egt_lut_v1.mat");
+S = load(lutFile);
+
+Nc_bp   = double(S.Nc_bp(:)');     % LUT speed axis 
+Wf_bp   = double(S.Wf_bp(:)');      % LUT fuel axis 
+EGT_LUT = double(S.EGT_LUT);      % LUT table
+
+%% FORCE LIMITER ============================
+EGT_test_gain = 1.15;
+
+% Initial EGT 
+N0  = min(max(N_init,  min(Nc_bp)), max(Nc_bp));
+Wf0 = min(max(Wf_init, min(Wf_bp)), max(Wf_bp));
+EGT_init = interp2(Wf_bp, Nc_bp, EGT_LUT, Wf0, N0, "linear");
 
 %  EGT limiter
 EGT_max  = 1.00; % normalized limit 
 lambda_T = tau_EGT;        % conservative target
-K_EGT    = A_EGT ;          % local EGT sensitivity to fuel (proxy gain)
+K_EGT    = 0.7 ;          % local EGT sensitivity to fuel 
 
 Kp_T = tau_EGT / (K_EGT * lambda_T);
 Ki_T = 1 / (K_EGT * lambda_T);

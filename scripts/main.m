@@ -27,7 +27,7 @@ tests(1).t_end         = 20.0;
 % --- Burst–Chop
 tests(2).name     = "burstChop";
 tests(2).profile  = "burstChop";
-tests(2).t_burst  = 1;
+tests(2).t_burst  = 3;
 tests(2).t_chop   = 15.0;
 tests(2).t_end    = 30.0;   % will become stopTime
 
@@ -38,10 +38,10 @@ tests(3).thr_init     = 0.1;
 tests(3).thr_final    = 0.9;
 tests(3).t_ramp_start = 4.0;
 tests(3).t_ramp_end   = 15.0;
-tests(3).t_end        = 30.0;
+tests(3).t_end        = 50.0;
 
 %% ======= LOOP  =======
-for k = 3 % 1:numel(tests)  %replace 1:numel(tests) for single test
+for k = 1 % 1:numel(tests)  %replace 1:numel(tests) for single test
 
     tc = tests(k);
 

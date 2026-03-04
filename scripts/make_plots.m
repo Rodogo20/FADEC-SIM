@@ -120,11 +120,17 @@ d = diff([false; lim; false]);
 iStart = find(d == 1);
 iEnd   = find(d == -1) - 1;
 
-for k = 1:numel(iStart)
-    ts = t(iStart(k)); te = t(iEnd(k));
-    p = patch([ts te te ts], [yl(1) yl(1) yl(2) yl(2)], [1 0 0], ...
-              'FaceAlpha', 0.08, 'EdgeColor', 'none', 'HandleVisibility', 'off');
-    uistack(p,'bottom'); % keep shading behind Wf lines
+for k = 1:numel(iStart)   %egt limiter shading
+    idx = iStart(k):iEnd(k);
+    x = t(idx);
+    y = Wf(idx);          
+    y0 = yl(1);            
+    p = patch([x; flipud(x)], ...
+              [y0*ones(size(y)); flipud(y)], ...
+              [1 0 0], ...
+              'FaceAlpha', 0.08, 'EdgeColor', 'none', ...
+              'HandleVisibility', 'off');
+    uistack(p,'bottom');
 end
 
 h1 = yline(1,'--');
@@ -132,16 +138,24 @@ h2 = yline(0,'--');
 h1.HandleVisibility = 'off';
 h2.HandleVisibility = 'off';
 
-ax = gca; yt = ax.YTick; tol = 1e-9;
+ax = gca;   %change y axis values 
+yt = ax.YTick(:);
+yt = unique([yt; 0; 1]);     % include 0 and 1 once
+yt = sort(yt);
+ax.YTick = yt;
 
-if ~any(abs(yt-0)<tol), yt = sort([yt 0]); ax.YTick = yt; end
-yl = string(yt);
+labels = string(yt);
 
-yl(abs(yt-0)<tol) = "$Wf_{\mathrm{min}}$";    %replaces y axis values 
-yl(abs(yt-1)<tol) = "$Wf_{\mathrm{max}}$";
+[~, i0] = min(abs(yt - 0));
+[~, i1] = min(abs(yt - 1));
+labels(i0) = "$Wf_{\mathrm{min}}$";
+labels(i1) = "$Wf_{\mathrm{max}}$";
 
-ax.YTickLabel = yl;
+ax.YTickLabel = labels;
 ax.TickLabelInterpreter = "latex";
+
+ax.YTickMode = "manual";
+ax.YTickLabelMode = "manual";
 
 
 

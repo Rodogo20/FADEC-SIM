@@ -17,6 +17,12 @@ docs/OneNote/
 docs/**.one
 docs/**.onepkg
 
+#data
+data/raw/
+*.h5
+*.hdf5
+
+
 docs/references/*.pdf
 docs/references/**/*.pdf
 
