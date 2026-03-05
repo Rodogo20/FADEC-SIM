@@ -9,7 +9,7 @@ addpath(genpath(projRoot));
 %% Settings
 rerunSim = true;
 cfg.projRoot = projRoot;
-cfg.model    = "top_level";
+cfg.model    = "fadec_sim";
 
 %% ========== TESTS ==========
 tests = struct([]);
