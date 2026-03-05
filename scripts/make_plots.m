@@ -1,16 +1,11 @@
-function make_plots(cfg, simOut, k, nTests)
+function make_plots(cfg, simOut, k)
 
 %% plots.m
 % Loads saved simulation output and plots
 
 
-scriptsDir = fileparts(mfilename("fullpath"));
-projRoot   = fileparts(scriptsDir);
-
-logsDir  = fullfile(projRoot, "results", "logs");
-plotsDir = fullfile(projRoot, "results", "plots");
-
-if ~exist(plotsDir, "dir")   %creates folder in case it doesnt exist
+plotsDir = fullfile(cfg.projRoot, "results", "plots");
+if ~exist(plotsDir, "dir")
     mkdir(plotsDir);
 end
 
@@ -39,8 +34,18 @@ Wf_Tlim = WfTlim_ts.Data;
 EGT   = EGT_ts.Data;
 Thrust = Th_ts.Data;
 
-EGT_lim_active = EGTLimActive_ts.Data;                   % numeric 0/1 (or logical)
+EGT_lim_active = EGTLimActive_ts.Data;                %limiter flag
+lim = (EGT_lim_active(:) > 0.5);
 
+d = diff([false; lim; false]);
+iStart = find(d == 1);
+iEnd   = find(d == -1) - 1;
+
+% remove tiny 1–2 sample blips
+minPts = 3;
+keep = (iEnd - iStart + 1) >= minPts;
+iStart = iStart(keep);
+iEnd   = iEnd(keep);
 
 %% --------- METRICS ----------
 
@@ -86,9 +91,9 @@ set(groot,'defaultFigureColor','w');
 
 % ----- figure position: each test takes one third of screen width -----
 pos = [
-    0.01 0.06 0.32 0.88
-    0.34 0.06 0.32 0.88
-    0.67 0.06 0.32 0.88
+    0.01 0.05 0.32 0.86
+    0.34 0.05 0.32 0.86
+    0.67 0.05 0.32 0.86
 ];
 
 fig = figure('Units','normalized', ...
@@ -120,24 +125,19 @@ xlabel("Time (s)");
 legend('$Wf{}_{\mathrm{raw}}$','$Wf{}_{\mathrm{cmd}}$',"Location","best",'Interpreter','latex');
 title('Fuel Commands')
 ylim([min([Wf;Wf_raw;0]-0.1) max([Wf;Wf_raw ; 1] + 0.1)]);
-
-lim = EGT_lim_active(:) > 0.5 & (EGT(:) > 1); 
-
 yl = ylim;
 
-d = diff([false; lim; false]);
-iStart = find(d == 1);
-iEnd   = find(d == -1) - 1;
-
-for k = 1:numel(iStart)   %egt limiter shading
-    idx = iStart(k):iEnd(k);
+for seg = 1:numel(iStart)   % EGT limiter shading 
+    idx = iStart(seg):iEnd(seg);
     x = t(idx);
-    y = Wf(idx);          
-    y0 = yl(1);            
+    y = Wf(idx);
+    y0 = yl(1);
+
     p = patch([x; flipud(x)], ...
               [y0*ones(size(y)); flipud(y)], ...
               [1 0 0], ...
-              'FaceAlpha', 0.08, 'EdgeColor', 'none', ...
+              'FaceAlpha', 0.08, ...
+              'EdgeColor', 'none', ...
               'HandleVisibility', 'off');
     uistack(p,'bottom');
 end
@@ -147,9 +147,9 @@ h2 = yline(0,'--');
 h1.HandleVisibility = 'off';
 h2.HandleVisibility = 'off';
 
-ax = gca;   %change y axis values 
+ax = gca;    %change y axis values 
 yt = ax.YTick(:);
-yt = unique([yt; 0; 1]);     % include 0 and 1 once
+yt = unique([yt; 0; 1]);     
 yt = sort(yt);
 ax.YTick = yt;
 
@@ -185,7 +185,7 @@ ax = gca;
 yt = unique(sort([ax.YTick 1]));
 ax.YTick = yt;
 
-% build labels as cell array
+% build labels
 labs = arrayfun(@num2str, yt, 'UniformOutput', false);
 idx = find(abs(yt - 1) < 1e-12, 1);
 labs{idx} = '$EGT_{\max}$';
@@ -196,8 +196,8 @@ ax.TickLabelInterpreter = 'latex';
 yl = ylim;
 yTop = yl(2);
 
-for k = 1:numel(iStart)
-    idx = iStart(k):iEnd(k);
+for seg = 1:numel(iStart)  % limiter shading
+    idx = iStart(seg):iEnd(seg);
     x = t(idx);
     y = EGT(idx);
 
@@ -209,6 +209,8 @@ for k = 1:numel(iStart)
               'HandleVisibility', 'off');
     uistack(p,'bottom');
 end
+
+
 %% Global title 
 title(tl, string(cfg.testName), 'Interpreter','none','FontWeight','bold');
 

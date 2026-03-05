@@ -17,7 +17,7 @@ if ~exist(outDir, "dir"), mkdir(outDir); end
 h5 = fullfile(rawDir,"N-CMAPSS_DS02-006.h5");
 if ~isfile(h5), error("Missing file: %s", h5); end
 
-% %variable names in each dataset
+ %variable names in each dataset
 
 % W_var  = strtrim(string(h5read(h5,"/W_var")));
 % T_var  = strtrim(string(h5read(h5,"/T_var")));
@@ -45,7 +45,6 @@ T_idle = prctile(T50,0.01);
 T_lim  = prctile(T50,98);
 
 EGT_n = (T50 - T_idle) / (T_lim - T_idle);   % normalize
-% EGT_n = max(min(EGT_n, 1.2), 0);    % allows max headroom
 
 %% create LUT
 
@@ -80,8 +79,6 @@ if ~exist(outDir,"dir"), mkdir(outDir); end
 
 save(outFile, "Nc_bp","Wf_bp","EGT_LUT","Nc_ref","Wf_ref","T_idle","T_lim");
 fprintf("Saved: %s\n", outFile);
-
-
 
 
 %% Compare plot

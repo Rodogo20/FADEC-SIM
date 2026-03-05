@@ -1,4 +1,8 @@
 %% MAIN
+% FADEC-SIM — A Simplified Generic Turbofan FADEC system 
+% Runs predefined test cases, saves logs, generates plots.
+% Author: Rodolfo Godinez  UC3M / UCSD
+
 clear; clc; close all;
 
 %% Paths
@@ -9,11 +13,10 @@ addpath(genpath(projRoot));
 %% Settings
 rerunSim = true;
 cfg.projRoot = projRoot;
-cfg.model    = "fadec_sim";
+cfg.model    = 'fadec_sim';
 
 %% ========== TESTS ==========
 tests = struct([]);
-
 
 
 % --- Step  test
@@ -62,7 +65,7 @@ for k =  1:numel(tests)  %replace 1:numel(tests) for single test
         load(cfg.logFile, "simOut");
     end
 
-    make_plots(cfg, simOut, k, numel(tests));
+    make_plots(cfg, simOut, k);
 end
 
 %% ======= local Build Throttle function =======

@@ -2,18 +2,19 @@ function simOut = run_simulations(cfg, tc)
 
 
 %% run_simulations.m
-% Stage 1 baseline simple runner 
+%baseline simple runner 
 
 thr_ts = tc.thr_ts;  %#ok<NASGU>
 
-%% Paths / project setup
-scriptDir = fileparts(mfilename("fullpath"));  
+%% Project setup
+mdl = cfg.model;  % Simulink model name (no .slx)
 
-
-mdl = cfg.model;                    % Simulink model name (no .slx)
-
-projRoot = fileparts(scriptDir);
-addpath(genpath(projRoot));         
+if isfield(cfg,"projRoot") && ~isempty(cfg.projRoot)
+    projRoot = cfg.projRoot;
+else
+    scriptDir = fileparts(mfilename("fullpath"));
+    projRoot  = fileparts(scriptDir);
+end    
 
 % Load parameters
 initFile = fullfile(projRoot, "scripts", "init_params.m");
@@ -39,20 +40,21 @@ set_param(mdl, "SignalLogging", "on", "SignalLoggingName", "logsout");
 
 simOut = sim(mdl, "SrcWorkspace","current");
 
-logsout = simOut.logsout;
-
-
-try        %sanity check
-    thr = simOut.logsout.get("throttle").Values;
+% sanity check
+try
+    names = simOut.logsout.getElementNames;
+    if ~any(strcmp(names,"throttle"))
+        warning("Signal 'throttle' not found in logsout (check signal name/label).");
+    end
 catch
-    warning("Signal 'throttle' not found in logsout (check signal name/label).");
+    warning("logsout missing or not a Dataset (check Signal Logging settings).");
 end
 
 
 %% Save baseline output
-logsDir = fullfile(projRoot, "results", "logs");
-if ~exist(logsDir, "dir")
-    mkdir(logsDir);
+logDir = fileparts(cfg.logFile);
+if ~exist(logDir, "dir")
+    mkdir(logDir);
 end
 
 

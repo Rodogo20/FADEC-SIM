@@ -1,5 +1,10 @@
 %% init_params.m
-% FADEC-SIM Stage 1 parameter initialization
+% FADEC-SIM  parameter initialization
+if ~exist("projRoot","var") || isempty(projRoot)
+    thisFile = mfilename("fullpath");
+    scriptsDir = fileparts(thisFile);
+    projRoot = fileparts(scriptsDir);
+end
 
 if ~exist("thr_ts","var")
     % fallback: if running model manually without main
@@ -16,7 +21,7 @@ thr0 = thr_ts.Data(1);
 
 %% Command Mapping
 
-N_idle    = 0.25;   %  normalized spool speed at iddle T= 0
+N_idle    = 0.25;   %  normalized spool speed at idle T= 0
 N_max_ref = 1.0;    % max commanded normalized speed from throttle=1
 
 %LUT
@@ -97,7 +102,7 @@ EGT_init = interp2(Wf_bp, Nc_bp, EGT_LUT, Wf0, N0, "linear");
 %  EGT limiter
 EGT_max  = 1.00; % normalized limit 
 lambda_T = tau_EGT;        % conservative target
-K_EGT    = 0.7 ;          % local EGT sensitivity to fuel 
+K_EGT    = 0.7;          % local EGT sensitivity to fuel 
 
 Kp_T = tau_EGT / (K_EGT * lambda_T);
 Ki_T = 1 / (K_EGT * lambda_T);
