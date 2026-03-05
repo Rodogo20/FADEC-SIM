@@ -1,4 +1,4 @@
-function make_plots(cfg, simOut)
+function make_plots(cfg, simOut, k, nTests)
 
 %% plots.m
 % Loads saved simulation output and plots
@@ -84,16 +84,24 @@ set(groot,'defaultAxesLineWidth',1.0);
 
 set(groot,'defaultFigureColor','w');
 
-fig = figure;
-set(fig,'WindowState','maximized');
-tl = tiledlayout(fig,2,2,'TileSpacing','compact','Padding','compact');
+% ----- figure position: each test takes one third of screen width -----
+pos = [
+    0.01 0.06 0.32 0.88
+    0.34 0.06 0.32 0.88
+    0.67 0.06 0.32 0.88
+];
+
+fig = figure('Units','normalized', ...
+             'Position', pos(k,:), ...
+             'Color','w');
+tl = tiledlayout(fig,3,1,'TileSpacing','loose','Padding','loose');
 
 %% Plot 1 - Command vs engine response
 
 nexttile;
 plot(t, Nref);hold on;
 plot(t, N);
-plot(t, throttle, 'Color', [0 0 0 0.25], 'LineWidth', 5); 
+plot(t, throttle, 'Color', [0 0 0 0.15], 'LineWidth', 8); 
 grid on;
 xlabel("Time (s)");
 ylabel("Normalized");
@@ -113,7 +121,8 @@ legend('$Wf{}_{\mathrm{raw}}$','$Wf{}_{\mathrm{cmd}}$',"Location","best",'Interp
 title('Fuel Commands')
 ylim([min([Wf;Wf_raw;0]-0.1) max([Wf;Wf_raw ; 1] + 0.1)]);
 
-lim = EGT_lim_active(:) > 0.5 & (EGT(:) > 1);;     % make sure it's logical
+lim = EGT_lim_active(:) > 0.5 & (EGT(:) > 1); 
+
 yl = ylim;
 
 d = diff([false; lim; false]);
@@ -161,35 +170,53 @@ ax.YTickLabelMode = "manual";
 
 
 %% Plot 3 - EGT
-
 nexttile;
-plot(t, EGT);
+plot(t, EGT, 'r'); hold on
+yline(1,'k--');
+
 grid on;
 xlabel("Time (s)");
-ylabel("EGT");
 title("EGT Proxy");
-ylim([0 max([1;EGT] + 0.1)]);
+ylim([0 max([1; EGT] + 0.1)]);
 
+ax = gca;
 
+% force tick at y = 1
+yt = unique(sort([ax.YTick 1]));
+ax.YTick = yt;
 
-%% Plot 4 - Thrust
+% build labels as cell array
+labs = arrayfun(@num2str, yt, 'UniformOutput', false);
+idx = find(abs(yt - 1) < 1e-12, 1);
+labs{idx} = '$EGT_{\max}$';
 
-nexttile;
-plot(t, Thrust);
-grid on;
-xlabel("Time (s)");
-ylabel("Thrust");
-title("Thrust Proxy");
-ylim([0 1.05]) ; 
+ax.YTickLabel = labs;
+ax.TickLabelInterpreter = 'latex';
 
+yl = ylim;
+yTop = yl(2);
 
+for k = 1:numel(iStart)
+    idx = iStart(k):iEnd(k);
+    x = t(idx);
+    y = EGT(idx);
 
+    p = patch([x; flipud(x)], ...
+              [y; yTop*ones(size(y))], ...
+              [1 0 0], ...
+              'FaceAlpha', 0.08, ...
+              'EdgeColor', 'none', ...
+              'HandleVisibility', 'off');
+    uistack(p,'bottom');
+end
 %% Global title 
-title(tl, "V2 — " + string(cfg.testName), 'Interpreter','none','FontWeight','normal');
+title(tl, string(cfg.testName), 'Interpreter','none','FontWeight','bold');
 
 
 % ===== Save figure =====
 outBase = fullfile(plotsDir, "V2_" + string(cfg.testName));
+
+set(findall(fig,'Type','axes'),'FontSize',14)
 exportgraphics(fig, outBase + ".png", "Resolution", 300);  
 
 end

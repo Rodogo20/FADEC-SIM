@@ -35,13 +35,13 @@ tests(2).t_end    = 30.0;   % will become stopTime
 tests(3).name         = "rampUp";
 tests(3).profile      = "ramp";
 tests(3).thr_init     = 0.1;
-tests(3).thr_final    = 0.9;
+tests(3).thr_final    = 0.8;
 tests(3).t_ramp_start = 4.0;
 tests(3).t_ramp_end   = 15.0;
-tests(3).t_end        = 50.0;
+tests(3).t_end        = 30.0;
 
 %% ======= LOOP  =======
-for k = 1 % 1:numel(tests)  %replace 1:numel(tests) for single test
+for k =  1:numel(tests)  %replace 1:numel(tests) for single test
 
     tc = tests(k);
 
@@ -62,7 +62,7 @@ for k = 1 % 1:numel(tests)  %replace 1:numel(tests) for single test
         load(cfg.logFile, "simOut");
     end
 
-    make_plots(cfg, simOut);
+    make_plots(cfg, simOut, k, numel(tests));
 end
 
 %% ======= local Build Throttle function =======
