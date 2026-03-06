@@ -1,9 +1,9 @@
 <div align="center">
 
 <h1 align="center">
-  <img src="./docs/Images/Matlab.png" height="26" alt="MATLAB" />
+  <img src="./docs/Images/Matlab.png" height="35" alt="MATLAB" />
   &nbsp; FADEC-SIM &nbsp;
-  <img src="./docs/Images/Simulink.png" height="26" alt="Simulink" />
+  <img src="./docs/Images/Simulink.png" height="35" alt="Simulink" />
 </h1>
   
 
@@ -14,9 +14,8 @@
 ![Status](https://img.shields.io/badge/status-complete-brightgreen)
 
 <p>
-  <a href="#overview">Overview</a> &nbsp;•&nbsp;
-  <a href="#run-quick-start">Run</a> &nbsp;•&nbsp;
-  <a href="#results-at-a-glance">Results</a> &nbsp;•&nbsp;
+  <a href="#run">Run</a> &nbsp;•&nbsp;
+  <a href="#results">Results</a> &nbsp;•&nbsp;
   <a href="#subsystems">Subsystems</a> &nbsp;•&nbsp;
   <a href="#references">References</a>
 </p>
@@ -28,41 +27,62 @@
 ------------------------------------------------------------------------
 
 
+A FADEC (Full Authority Digital Engine Control) is the onboard computer that commands engine fuel to meet pilot demands while enforcing safety limits. This project builds a simplified FADEC-style controller in MATLAB/Simulink around a generic turbofan-like plant.
 
-## Overview
-summary summary summarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummary 
+The design is guided by the control architecture and terminology described in NASA’s C-MAPSS (Commercial Modular Aero-Propulsion System Simulation).
 
 <div align="center">
-  <img src="./docs/Images/banner1.png" width="100%" alt="Description" />
+  <img src="./docs/Images/model.png" width="100%" alt="Description" />
 </div>
 
 
 
+<a id="run"></a>
 
-
-
-
-
-## Run (Quick Start)
-**Requirements**
-- MATLAB + Simulink **R2024b**
-- Toolboxes (if any): `TODO`
-
-**Steps**
-1. Open MATLAB in the repository root folder
-2. Run:
-   ```matlab
-   main
-   ```
-
-<a id="references"></a>
-<table width="95%">
+## How to Run
+**Requirements:** MATLAB + Simulink **R2024b**  
+<div style="margin-top:-10px; margin-bottom:-8px;">
+<table>
   <tr>
-    <td align="left"><h2>References</h2></td>
-    <td align="right"><img src="./docs/Images/nasa2.png" height="40" alt="NASA" /></td>
+    <td><b>Steps:</b></td>
+    <td>1) Open MATLAB in the repository root folder<br/>2) Run: <code>main</code></td>
   </tr>
 </table>
+</div>
 
+
+
+<a id="results"></a>
+
+## Results
+
+
+<div align="center">
+  <img src="./docs/Images/plots.png" width="100%" alt="Description" />
+</div>
+
+
+
+These plots summarize three standard transients (Step Up, Burst Chop, Ramp Up). 
+Top row shows speed reference tracking from input throttle, middle row shows how the raw fuel request is shaped into the final command by limits/rate logic, and bottom row shows the EGT proxy, where EGT stands for Exhaust Gas Temperature.
+
+
+
+
+
+
+
+
+
+
+
+<a id="references"></a>
+
+<h2 id="references">
+  References
+  <img src="./docs/Images/nasa2.png" height="40" alt="NASA"
+       style="float:right; position:relative; top:-4px;" />
+</h2>
 
 This project uses the following two NASA reports as primary references (see `docs/references/`):
 
