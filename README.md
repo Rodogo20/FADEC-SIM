@@ -33,7 +33,7 @@
 summary summary summarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummary 
 
 <div align="center">
-  <img src="./docs/images/MODEL1.png" width="100%" alt="Description" />
+  <img src="./docs/images/banner1.png" width="100%" alt="Description" />
 </div>
 
 
