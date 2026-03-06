@@ -32,7 +32,7 @@ A FADEC (Full Authority Digital Engine Control) is the onboard computer that com
 The design is guided by the control architecture and terminology described in NASA’s C-MAPSS (Commercial Modular Aero-Propulsion System Simulation).
 
 <div align="center">
-  <img src="./docs/Images/model.png" width="100%" alt="Description" />
+  <img src="./docs/Images/MODEL.png" width="100%" alt="Description" />
 </div>
 
 
