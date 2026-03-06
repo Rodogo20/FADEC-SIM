@@ -1,9 +1,9 @@
 <div align="center">
 
 <h1 align="center">
-  <img src="./docs/images/Matlab.png" height="26" alt="MATLAB" />
+  <img src="./docs/Images/Matlab.png" height="26" alt="MATLAB" />
   &nbsp; FADEC-SIM &nbsp;
-  <img src="./docs/images/Simulink.png" height="26" alt="Simulink" />
+  <img src="./docs/Images/Simulink.png" height="26" alt="Simulink" />
 </h1>
   
 
@@ -33,7 +33,7 @@
 summary summary summarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummarysummary 
 
 <div align="center">
-  <img src="./docs/images/banner1.png" width="100%" alt="Description" />
+  <img src="./docs/Images/banner1.png" width="100%" alt="Description" />
 </div>
 
 
@@ -59,7 +59,7 @@ summary summary summarysummarysummarysummarysummarysummarysummarysummarysummarys
 <table width="95%">
   <tr>
     <td align="left"><h2>References</h2></td>
-    <td align="right"><img src="./docs/images/nasa2.png" height="40" alt="NASA" /></td>
+    <td align="right"><img src="./docs/Images/nasa2.png" height="40" alt="NASA" /></td>
   </tr>
 </table>
 
