@@ -43,7 +43,7 @@ This way the simulation captures the actual non-linear curvature and thermal beh
 The design is guided by the control architecture, terminology and data described in [**NASA’s C-MAPSS**](#references).
 
 <div align="center">
-  <img src="./docs/Images/model.png" width="100%" alt="Description" />
+  <img src="./docs/Images/MODEL.png" width="100%" alt="Description" />
 </div>
 
 
