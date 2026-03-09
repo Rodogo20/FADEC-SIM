@@ -52,7 +52,7 @@ The design is guided by the control architecture, terminology and data described
 
 ## How to Run
 
-<table>
+<table border="0">
   <tr>
     <td valign="top"><b>Requirements</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATLAB<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simulink R2024b</td>
     <td width="150"></td>
