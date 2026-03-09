@@ -51,18 +51,12 @@ The design is guided by the control architecture, terminology and data described
 <a id="run"></a>
 
 ## How to Run
-<table width="100%">
+
+<table>
   <tr>
-    <td width="45%" valign="top">
-      <b>Requirements</b><br/>
-      &nbsp;&nbsp;MATLAB<br/>
-      &nbsp;&nbsp;Simulink R2024b
-    </td>
-    <td width="75%" valign="top">
-      <b>Steps</b><br/>
-      &nbsp;&nbsp;1) Open MATLAB in the repository root folder<br/>
-      &nbsp;&nbsp;2) Run: <code>main</code>
-    </td>
+    <td valign="top"><b>Requirements</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MATLAB<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simulink R2024b</td>
+    <td width="150"></td>
+    <td valign="top"><b>Steps</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Open MATLAB in the repository root folder<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) Run: <code>main</code></td>
   </tr>
 </table>
 
