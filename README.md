@@ -53,7 +53,7 @@ The design is guided by the control architecture, terminology and data described
 ## How to Run
 <table width="100%">
   <tr>
-<td width="55%" valign="top">
+<td width="40%" valign="top">
   <b>Requirements</b><br/>
   <span style="margin-left:10px; display:inline-block;">MATLAB<br/>Simulink R2024b</span>
 </td>
@@ -95,8 +95,7 @@ Top row shows speed reference tracking from input throttle, middle row shows how
 
 <h2 id="references">
   References
-  <img src="./docs/Images/nasa2.png" height="40" alt="NASA"
-       style="float:right; position:relative; top:-4px;" />
+  <img src="./docs/Images/nasa2.png" height="40" alt="NASA" align="right" />
 </h2>
 
 This project uses the following two NASA reports as primary references (see `docs/references/`):
