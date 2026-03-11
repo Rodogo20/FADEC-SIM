@@ -24,8 +24,6 @@ data/raw/
 *.hdf5
 
 
-docs/references/*.pdf
-docs/references/**/*.pdf
 
 # But keep README screenshots
 !docs/images/**
