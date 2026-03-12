@@ -14,11 +14,16 @@ results/metrics/
 
 #docs 
 docs/OneNote/
+docs/Images/stage1/
 docs/**.one
 docs/**.onepkg
 
-docs/references/*.pdf
-docs/references/**/*.pdf
+#data
+data/raw/
+*.h5
+*.hdf5
+
+
 
 # But keep README screenshots
 !docs/images/**
