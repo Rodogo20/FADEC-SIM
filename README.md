@@ -134,3 +134,6 @@ This project uses the following NASA reports as primary references (see `docs/re
 </div>
 
 
+
+![Stage 1 — stepDown](./docs/Images/V1_model.png)
+![Stage 1 — stepUp](./docs/Images/V1_StepUp.png)
