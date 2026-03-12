@@ -132,8 +132,3 @@ This project uses the following NASA reports as primary references (see `docs/re
 <div align="center">
   <img src="./docs/Images/nasa.png" width="50%" alt="NASA" />
 </div>
-
-
-
-![Stage 1 — stepDown](./docs/Images/V1_model.png)
-![Stage 1 — stepUp](./docs/Images/V1_StepUp.png)
