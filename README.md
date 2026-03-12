@@ -102,7 +102,7 @@ The <b>bottom</b> row shows the <u>EGT</u> proxy, where EGT stands for Exhaust G
 The simulation combines a spool-speed control law with a non-linear turbofan model to get realistic engine transients. Fuel flow is managed through a PI loop with tracking anti-windup, with actuator saturation and rate limiting keeping things within safe physical bounds.
 
 <div align="center">
-  <img src="./docs/Images/flowchart1.png" width="95%" 
+  <img src="./docs/Images/flowchart1.png" width="100%" 
   alt="3x3 plots" />
 </div>
 
@@ -110,7 +110,7 @@ The simulation combines a spool-speed control law with a non-linear turbofan mod
 Following the NASA control philosophy, fuel flow is treated as the main control variable, while spool speed is the main indicator of engine power output. In practice, this means the controller does not send the raw fuel request directly to the plant. Instead, the command is passed through limiter and protection logic so the engine stays stable and doesn't overheat during aggressive throttle changes
 <div align="center">
 </br>
-  <img src="./docs/Images/LUT.png" width="95%" 
+  <img src="./docs/Images/LUT.png" width="100%" 
   alt="3x3 plots" />
 </div>
 
