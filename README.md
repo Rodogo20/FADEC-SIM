@@ -38,14 +38,17 @@
 -------------------------------------------------------------
 
 
-A **FADEC** (Full Authority Digital Engine Control) is the onboard computer that commands engine fuel to meet pilot demand while enforcing safety limits. This project builds a simplified FADEC-style controller in MATLAB/Simulink around a generic turbofan-like plant.
+A **FADEC** (Full Authority Digital Engine Control) is the onboard computer that manages engine fuel 
+to meet pilot demand while enforcing safety limits. This project builds a simplified FADEC-style 
+controller in MATLAB/Simulink around a generic turbofan plant.
 
-The simulation focuses on engine transient response under throttle changes, combining closed-loop control with a non-linear plant representation to produce realistic speed, fuel-flow, and temperature trends.
+The simulation focuses on engine transient response under throttle changes, combining closed-loop 
+control with a nonlinear plant to produce realistic speed, fuel-flow, and temperature trends.
 
+Everything runs in normalized variables, which keeps controller, limiter, and proxy outputs on a 
+common scale across test cases.
 
-The model is implemented in normalized variables, which keep controller, limiter and proxy outputs on a common scale across the test cases.
-
-The design is guided by the control architecture, terminology and data described in [**NASA’s C-MAPSS**](#references).
+The design follows the control architecture, terminology, and data from [**NASA's C-MAPSS**](#references).
 
 
 
@@ -69,7 +72,6 @@ The design is guided by the control architecture, terminology and data described
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Simulink R2024b &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) Run: `main`
 
 `main` runs the default cases and saves figures to `./results/`. &nbsp; Edit `scripts/` to change scenarios or settings.<br/>
-Supporting MATLAB scripts handle parameter initialization, case execution, logging and plot generation.<br/>
 
 
 <a id="results"></a>
@@ -84,11 +86,11 @@ Supporting MATLAB scripts handle parameter initialization, case execution, loggi
 
 
 <br/>
-These plots summarize three standard transients: <b>Step Up, Burst Chop and Ramp Up. </b>
+These plots cover  three standard transients: <b>Step Up, Burst Chop and Ramp Up. </b>
 
-<br/>The <b>top</b> row shows <u>speed</u> reference tracking from input throttle. It compares the demanded spool-speed profile with the simulated engine response, making it easy to see how the closed-loop system follows each maneuver. Across the three transients, this row mainly highlights rise, settling, and the overall quality of the tracking response.
+<br/>The <b>top</b> row shows <u>speed</u> reference tracking from input throttle. It compares the demanded spool-speed profile with the simulated engine response, so you can see how the closed-loop system handles each maneuver ;  rise time, settling, and overall tracking quality.
 
-The <b>middle</b> row shows how the raw <u>fuel</u> request is shaped into the final command by limits and rate logic. This is where the protection layer becomes visible, since the controller may briefly ask for more aggressive fuel changes than can be directly applied to the plant. The red shaded intervals indicate the periods where the thermal protection is active and fuel is being constrained to prevent further temperature rise.
+The <b>middle</b> row shows how the raw <u>fuel</u> request is shaped into the final command by limits and rate logic. This is where the protection layer becomes visible, since the controller may briefly ask for more aggressive fuel changes than can be directly applied to the plant. Red shaded intervals mark where the thermal protection is active and fuel is being constrained to prevent further temperature rise.
 
 The <b>bottom</b> row shows the <u>EGT</u> proxy, where EGT stands for Exhaust Gas Temperature. It provides a simple view of the thermal response during each maneuver and shows how temperature rises and settles more gradually than speed or fuel.
 
@@ -97,7 +99,7 @@ The <b>bottom</b> row shows the <u>EGT</u> proxy, where EGT stands for Exhaust G
 ## Control Structure
 
 
-The simulation combines a spool-speed control law with a non-linear turbofan model to capture realistic engine transients. The controller manages fuel flow through a PI feedback loop with tracking-based anti-windup while enforcing essential safety and physical limits like actuator saturation and rate limiting.
+The simulation combines a spool-speed control law with a non-linear turbofan model to get realistic engine transients. Fuel flow is managed through a PI loop with tracking anti-windup, with actuator saturation and rate limiting keeping things within safe physical bounds.
 
 <div align="center">
   <img src="./docs/Images/flowchart1.png" width="95%" 
@@ -105,15 +107,14 @@ The simulation combines a spool-speed control law with a non-linear turbofan mod
 </div>
 
 <br/>
-Following the NASA control philosophy, fuel flow is treated as the main control variable, while spool speed acts as the main indicator of engine power setting. In practice, this means the controller does not send the raw fuel request directly to the plant. Instead, the command is passed through limiter and protection logic so the engine response remains stable and thermally reasonable during aggressive throttle changes. This mirrors real FADEC systems, where fuel metering must achieve the demanded power without violating key operating limits.
-
+Following the NASA control philosophy, fuel flow is treated as the main control variable, while spool speed is the main indicator of engine power output. In practice, this means the controller does not send the raw fuel request directly to the plant. Instead, the command is passed through limiter and protection logic so the engine stays stable and doesn't overheat during aggressive throttle changes
 <div align="center">
 </br>
   <img src="./docs/Images/LUT.png" width="95%" 
   alt="3x3 plots" />
 </div>
 
-The plant replaces traditional linear constants with a multidimensional map (LUT) derived from real-world flight data. This way the simulation captures the actual non-linear curvature and thermal behavior of a modern turbofan more realistically than a single fixed-gain approximation. 
+The plant replaces fixed linear constants with a multidimensional map (LUT) built from real-world flight data. This way the simulation captures the actual non-linear curvature and thermal behavior of a modern turbofan more realistically than a single fixed-gain approximation. 
 
 For a block-level view of the complete implementation, see the [model overview](#model).
 
